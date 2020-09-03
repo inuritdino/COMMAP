@@ -73,7 +73,7 @@ While in the source directory:
 
 ```
 d <- readRDS("mESC_expr_all_conditions.Rds")
-enrich.res <- run.enrichment(d, org="MMU")
+enrich <- run.enrichment(d, org="MMU")
 ## Get all if.TF's in the LIF+serum media (cell-type mESC)
 ifs.gr <- unlist(lapply(enrich$mESC,function(x) lapply(x,function(y) y$if.TF)))
 ## Get all if.TF's in the 2i+LIF media (cell-type TwoiLIF)
