@@ -64,11 +64,36 @@ is down.
 - `cell.id`: cell id (ordering number).
 - `p.adj`: adjusted P-value for enrichment
 
+##### Example enrichment
+
+We will take a data set (GEO: GSE60749) where different conditions for
+mouse embryonic stem cells were used. This data set does not contain interacting populations
+so we cannot get an interaction map, but compare the enrichment results.
+While in the source directory:
+
+```
+d <- readRDS("mESC_expr_all_conditions.Rds")
+enrich.res <- run.enrichment(d, org="MMU")
+## Get all if.TF's in the LIF+serum media (cell-type mESC)
+ifs.gr <- unlist(lapply(enrich$mESC,function(x) lapply(x,function(y) y$if.TF)))
+## Get all if.TF's in the 2i+LIF media (cell-type TwoiLIF)
+ifs.2i <- unlist(lapply(enrich$TwoiLIF,function(x) lapply(x,function(y) y$if.TF)))
+## Difference in TF's
+setdiff(ifs.gr,ifs.2i)
+# [1] "Myc"    "Snai1"  "Aire"   "Jun"    "Gli1"   "Id2"    "Smad7"  "Id1"   
+# [9] "Id4"    "Smad1"  "Id3"    "Rxrg"   "Nfyb"   "Rfxank" "Nfya"   "Nfyc"
+```
+
+As we can see that Id1-4 and Myc factors of stemness are differential
+enriched for the LIF+serum media as was noted previously (Ghimire et
+al. Sci Rep 8, 5884, 2018 https://doi.org/10.1038/s41598-018-24051-5)
+
+
+
 ## Credits and special thanks
 
 1. TF-TF interaction network is from
 [SigHotSpotter](https://academic.oup.com/bioinformatics/article/36/6/1963/5614427)
-(Currently not used)
 
 2. Ligand-Receptor interaction were collected by PhD candidates (31.08.2020) Kartikeya Singh and Chrysovalantou Kalaitzidou at
 University of Luxembourg.
