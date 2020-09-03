@@ -1,7 +1,14 @@
 # Communication Map based on the single-cell RNA-sequencing data
 
 ComMap builds an inter-cellular communication map (Interactome) based
-on the scRNA-seq data and pathway enrichment.
+on the scRNA-seq data and pathway enrichment. The final interactome
+contains receptors connected via the intra-cellular signaling pathways
+to a set of transcription factors (TF) and their immediate targets
+(TF-TF regulatory network) that are maintained throughout a population
+of single cells. Thus, persistent TF pattern emulates a "phenotype"
+for each population. Receptors signaling to maintain the phenotype of
+each cell-type population are then paired with their cognate ligands
+via a database of protein-protein interactions.
 
 ## Quick start
 
@@ -86,8 +93,8 @@ setdiff(ifs.gr,ifs.2i)
 
 As we can see that Id1-4 and Myc factors of stemness are differential
 enriched for the LIF+serum media as was noted previously (Ghimire et
-al. Sci Rep 8, 5884, 2018 https://doi.org/10.1038/s41598-018-24051-5)
-
+al. Sci Rep 8, 5884, 2018 https://doi.org/10.1038/s41598-018-24051-5,
+Fig.6E therein)
 
 
 ## Credits and special thanks
