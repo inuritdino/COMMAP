@@ -12,6 +12,53 @@ via a database of protein-protein interactions.
 
 ## Quick start
 
+We have scRNA-seq data (GEO: GSE96981) from co-culturing of three
+individual cell lines (mesenchymal (MC), hepatic (HE), and endothelial
+(EC)) found in liver followed by an event of self-organization into a
+Liver Bud (LB). We could study the change in putative inter-cellular
+interactions between the cells.  In the directory where this package
+is located, type:
+```
+source("commap.R")
+
+``` 
+This loads all functions from the package. Next, we will load the data
+and run the whole pipeline, the result of which is the communication
+map. In this experiment, one has the three cell lines (MC, HE, and EC)
+individually (prior to LB) and in LB.
+
+```
+## Prepare the data
+d.indiv <- readRDS("LiverLB_indiv.Rds")
+d.lb <- readRDS("LiverLB_lb.Rds")
+## Run the pipeline (use genes that are expressed in at least 10% of the population
+## Use "old" ligand-receptor DB (this is a more curated one)
+cm.indiv <- sc.commap(d.indiv, org="HSA", conserv.thr=0.1, LR.db="old")
+cm.lb <- sc.commap(d.lb, org="HSA", conserv.thr=0.1, LR.db="old")
+```
+
+One thing that you could observe is that VEGFA->KDR signalling is more
+prominent when in LB phase as was observed in the original paper (Camp
+et al. Nature 546, 533–538, 2017):
+```
+> subset(cm.indiv, Receptor == "KDR" & Ligand == "VEGFA")
+    Lig.pop    L.frac Ligand Receptor    R.frac Rec.pop
+223      EC 0.1621622  VEGFA      KDR 0.3108108      EC
+589      HE 0.6548673  VEGFA      KDR 0.3108108      EC
+976      MC 0.6346154  VEGFA      KDR 0.3108108      EC
+> subset(cm.lb, Receptor == "KDR" & Ligand == "VEGFA")
+     Lig.pop    L.frac Ligand Receptor    R.frac Rec.pop
+237    EC.LB 0.8679245  VEGFA      KDR 0.4716981   EC.LB
+684    HE.LB 0.8703704  VEGFA      KDR 0.4716981   EC.LB
+1138   MC.LB 0.9850746  VEGFA      KDR 0.4716981   EC.LB
+```
+In the LB case one can see that the relative expression
+`L.frac/R.frac` is much stronger for both the ligand (`VEGFA`) and
+receptor (`KDR`). Also note that all three populations signal toward
+endothelial cells.
+
+## Quick start (Enrichment only)
+
 In the directory where the package files are type at the R prompt:
 ```
 source("commap.R")
@@ -27,7 +74,7 @@ enrich.res <- run.enrichment(scData, org="MMU")
 `scData` must be in a matrix format (genes x cells) with `rownames`
 being gene names and `colnames` being the cell type annotation (R
 allows for duplicated colnames, so the same cell type must be
-duplicated for each cell).
+duplicated for each cell of that type).
 
 #### Note on enrichment output
 `enrich.res` is a recursive list structure. Each cell-type list,
